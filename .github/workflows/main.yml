@@ -1,25 +1,24 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Sync to Hugging Face hub
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   sync-to-hub:
     runs-on: ubuntu-latest
     steps:
+      - name: Check large files
+        uses: ActionsDesk/lfs-warning@v2.0
+        with:
+          filesizelimit: 10485760
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
